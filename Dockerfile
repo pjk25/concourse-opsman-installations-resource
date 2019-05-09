@@ -21,6 +21,8 @@ FROM alpine
 COPY --from=BASE /om-linux /usr/local/bin/om
 COPY --from=BASE /concourse-opsman-installations-resource /usr/local/bin
 
+RUN chmod +x /usr/local/bin/om
+
 ADD opt-resource /opt/resource
 
 CMD ["/concourse-opsman-installations-resource"]
