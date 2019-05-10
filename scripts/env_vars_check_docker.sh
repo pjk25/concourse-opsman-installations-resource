@@ -15,4 +15,4 @@ jq -n "{
     \"version\": {
         \"finished_at\": \"2019-05-09T03:27:24.576Z\"
     }
-}" | docker run -i concourse-opsman-installations-resource /opt/resource/check --debug
+}" | docker run -i concourse-opsman-installations-resource /opt/resource/check
