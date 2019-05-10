@@ -10,8 +10,6 @@
 
 (defn is-gte-version?
   [version1 version2]
-  (comment (binding [*out* *err*]
-    (println "is-gte-version?" version1 version2)))
   (<= (compare (:finished_at version1) (:finished_at version2)) 0))
 
 (s/fdef is-gte-version?
