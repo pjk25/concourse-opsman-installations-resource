@@ -21,16 +21,16 @@
 (defn check
   [cli-options om payload]
   (let [{previous-version :version} payload]
-    (binding [*out* *err*]
-      (println "Checking for installations since" previous-version))
-    (let [installations-result (om-cli/curl om "/api/v0/installations")
-          {:keys [installations]} (util/keywordize installations-result)
-          versions (map #(select-keys % [:finished_at]) installations)]
-      (comment (binding [*out* *err*]
-        (println "Found versions:")
-        (clojure.pprint/pprint versions)))
-      (filterv #(or (nil? previous-version)
-                    (is-gte-version? previous-version %)) (reverse versions)))))
+    (if (:debug cli-options)
+      (binding [*out* *err*]
+        (println "Checking for installations since" previous-version)))
+    (->> (om-cli/curl om "/api/v0/installations")
+         (util/keywordize)
+         (:installations)
+         (map #(select-keys % [:finished_at]))
+         (reverse)
+         (filterv #(or (nil? previous-version)
+                       (is-gte-version? previous-version %))))))
 
 (s/fdef check
         :args (s/cat :cli-options map?
