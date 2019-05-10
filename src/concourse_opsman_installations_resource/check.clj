@@ -1,7 +1,6 @@
 (ns concourse-opsman-installations-resource.check
   (:require [clojure.data.json :as json]
             [clojure.spec.alpha :as s]
-            [concourse-opsman-installations-resource.util :as util]
             [concourse-opsman-installations-resource.om-cli :as om-cli]))
 
 (s/def ::finished_at string?)
