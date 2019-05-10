@@ -22,6 +22,7 @@
       (binding [*out* *err*]
         (println "Retrieving version" version)))
     (let [installation (->> (om-cli/curl om "/api/v0/installations")
+                            (#(json/read-str % :key-fn keyword))
                             (:installations)
                             (filter #(same-installation? version %))
                             (first))]

@@ -9,7 +9,7 @@
   (reify om-cli/Om
     (curl [this path]
       (condp = path
-        "/api/v0/installations" (json/read-str (slurp "resources/fixtures/installations.json") :key-fn keyword)
+        "/api/v0/installations" (slurp "resources/fixtures/installations.json")
         (throw (Exception. (slurp "resources/fixtures/curl_not_found.html")))))))
 
 (deftest check

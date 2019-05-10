@@ -23,6 +23,7 @@
       (binding [*out* *err*]
         (println "Checking for installations since" previous-version)))
     (->> (om-cli/curl om "/api/v0/installations")
+         (#(json/read-str % :key-fn keyword))
          (:installations)
          (map #(select-keys % [:finished_at]))
          (reverse)

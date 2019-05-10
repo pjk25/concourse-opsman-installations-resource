@@ -12,7 +12,7 @@
   (reify om-cli/Om
     (curl [this path]
       (condp = path
-        "/api/v0/installations" (json/read-str (slurp "resources/fixtures/installations.json") :key-fn keyword)
+        "/api/v0/installations" (slurp "resources/fixtures/installations.json")
         (throw (Exception. (slurp "resources/fixtures/curl_not_found.html")))))))
 
 (deftest in
@@ -24,7 +24,6 @@
       (is (= (in/in {:destination destination} fake-om {:version {:finished_at "2018-04-26T03:14:45.528Z"}})
            {:version {:finished_at "2018-04-26T03:14:45.528Z"}
             :metadata [{:name "status" :value "succeeded"}]}))
-;       (in/in {:destination destination} fake-om {:version {:finished_at "2018-04-26T03:14:45.528Z"}})
       (is (json/read-str (slurp (io/file destination "installation.json"))))))
 
   (testing "when the version does not exist"
