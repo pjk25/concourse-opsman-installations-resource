@@ -35,6 +35,13 @@
             (println "Writing installation data to" (.toString json-file))))
         (with-open [w (io/writer json-file)]
           (json/write installation w)))
+      (if (get-in payload [:params :fetch_logs])
+          (let [installation_logs (om-cli/curl om (format "/api/v0/installations/%d/logs" (:id installation)))
+                logs-file (io/file (:destination cli-options) "installation_logs.json")]
+            (if (:debug cli-options)
+              (binding [*out* *err*]
+                (println "Writing installation logs to" (.toString logs-file))))
+            (spit logs-file installation_logs)))
       {:version (select-keys installation [:finished_at])
        :metadata [{:name "status" :value (:status installation)}]})))
 
