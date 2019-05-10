@@ -1,5 +1,7 @@
 FROM clojure:tools-deps
 
+WORKDIR /concourse-opsman-installations-resource
+
 RUN curl -L https://github.com/pivotal-cf/om/releases/download/1.0.0/om-linux -o /usr/local/bin/om
 RUN chmod +x /usr/local/bin/om
 
@@ -15,4 +17,4 @@ RUN rm -dR resources test scripts
 
 ADD opt-resource /opt/resource
 
-CMD ["./scripts/run.sh"]
+CMD ["clojure", "-m", "concourse-opsman-installations-resource.cli"]
