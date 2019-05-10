@@ -10,7 +10,10 @@
            :native-image {:main-opts ["-m clj.native-image concourse-opsman-installations-resource.cli"
                                       "-H:Name=concourse-opsman-installations-resource"
                                       "-Dclojure.compiler.direct-linking=true"
-                                      "--static"]
+                                      "--report-unsupported-elements-at-runtime"
+                                      ; "--static"
+                                      "--no-fallback"
+                                      ]
                           :extra-deps {clj.native-image
                                        {:git/url "https://github.com/taylorwood/clj.native-image.git"
                                         :sha "498baa963e914fd817dbf33ea251729efd0c8f95"}}}}}
