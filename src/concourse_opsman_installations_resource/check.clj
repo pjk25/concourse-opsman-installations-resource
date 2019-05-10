@@ -25,7 +25,6 @@
       (binding [*out* *err*]
         (println "Checking for installations since" previous-version)))
     (->> (om-cli/curl om "/api/v0/installations")
-         (util/keywordize)
          (:installations)
          (map #(select-keys % [:finished_at]))
          (reverse)
