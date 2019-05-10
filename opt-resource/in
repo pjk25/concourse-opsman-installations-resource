@@ -2,4 +2,4 @@
 
 set -e
 
-clojure -m concourse-opsman-installations-resource.cli in "$@"
+clojure -m concourse-opsman-installations-resource.cli in --debug "$@"
