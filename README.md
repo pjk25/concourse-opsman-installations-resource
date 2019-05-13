@@ -18,7 +18,10 @@ Timestamp of the finished_at of the installations
 
 Fetch the installation metadata for an installation
 
+params:
+  fetch_logs: true|false
+  include_history: true|false
+
 ### out
 
 This resource cannot put.
-

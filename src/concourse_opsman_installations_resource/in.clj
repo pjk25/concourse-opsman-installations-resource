@@ -20,13 +20,20 @@
     (if (:debug cli-options)
       (binding [*out* *err*]
         (println "Retrieving version" version)))
-    (let [installation (->> (om-cli/curl om "/api/v0/installations")
+    (let [installations (->> (om-cli/curl om "/api/v0/installations")
                             (#(json/read-str % :key-fn keyword))
-                            (:installations)
-                            (filter #(same-installation? version %))
-                            (first))]
+                            (:installations))
+          installation (first (filter #(same-installation? version %) installations))]
       (if (nil? installation)
         (throw (Exception. (str "Version " version "not found."))))
+
+      (if (:include_history params)
+        (let [json-file (io/file (:destination cli-options) "installations.json")]
+          (if (:debug cli-options)
+            (binding [*out* *err*]
+              (println "Writing all installation data to" (.toString json-file))))
+          (with-open [w (io/writer json-file)]
+            (json/write installations w))))
       
       (let [json-file (io/file (:destination cli-options) "installation.json")]
         (if (:debug cli-options)
