@@ -1,7 +1,6 @@
 (ns concourse-opsman-installations-resource.check
   (:require [clojure.data.json :as json]
             [clojure.spec.alpha :as s]
-            [concourse-opsman-installations-resource.util :as util]
             [concourse-opsman-installations-resource.om-cli :as om-cli]))
 
 (s/def ::finished_at string?)
@@ -10,8 +9,6 @@
 
 (defn is-gte-version?
   [version1 version2]
-  (comment (binding [*out* *err*]
-    (println "is-gte-version?" version1 version2)))
   (<= (compare (:finished_at version1) (:finished_at version2)) 0))
 
 (s/fdef is-gte-version?
@@ -25,7 +22,6 @@
       (binding [*out* *err*]
         (println "Checking for installations since" previous-version)))
     (->> (om-cli/curl om "/api/v0/installations")
-         (util/keywordize)
          (:installations)
          (map #(select-keys % [:finished_at]))
          (reverse)

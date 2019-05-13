@@ -3,7 +3,6 @@
   (:require [clojure.string :as string]
             [clojure.tools.cli :refer [parse-opts]]
             [clojure.data.json :as json]
-            [concourse-opsman-installations-resource.util :as util]
             [concourse-opsman-installations-resource.om-cli :as om-cli]
             [concourse-opsman-installations-resource.core :as core]
             [concourse-opsman-installations-resource.check :as check]))
@@ -70,12 +69,12 @@
     (if exit-message
       (exit (if ok? 0 1) exit-message)
       (try
-        (let [{:keys [source] :as payload} (util/keywordize (json/read *in*))]
-          (json/write (action options (om-cli/->OmCli (:opsmgr source)) payload) *out*))
-        (shutdown-agents)
+        (let [{:keys [source] :as payload} (json/read *in* :key-fn keyword)
+              result (action options (om-cli/->OmCli (:opsmgr source)) payload)]
+          (json/write result *out*)
+          (flush)
+          (shutdown-agents))
         (catch Exception e
           (if (:debug options) (.printStackTrace e))
           (exit 1 (str "\nERROR: " e)))))))
 
-; (s/def ::source (s/keys :req-un [::opsmgr]))
-; (s/def ::check-payload (s/keys :req-un [::source ::version]))

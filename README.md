@@ -21,4 +21,3 @@ Fetch the installation metadata for an installation
 ### out
 
 This resource cannot put.
-
