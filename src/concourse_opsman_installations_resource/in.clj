@@ -19,7 +19,7 @@
   (let [json-file (io/file (:destination cli-options) filename)]
     (if (:debug cli-options)
       (binding [*out* *err*]
-        (println "Writing all installation data to" (.toString json-file))))
+        (println "Writing data to" (.toString json-file))))
     (with-open [w (io/writer json-file)]
       (json/write content w))))
 
