@@ -28,7 +28,9 @@
                         (reverse))]
       (if previous-version
         (filterv #(is-gte-version? previous-version %) versions)
-        [(first versions)]))))
+        (if (get-in payload [:source :history_hack_mode])
+          (take 1 versions)
+          versions)))))
 
 (s/fdef check
         :args (s/cat :cli-options map?
