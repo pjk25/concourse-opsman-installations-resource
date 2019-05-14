@@ -16,8 +16,7 @@
   (stest/instrument `check/check)
   (testing "with no current last version"
     (is (= (check/check {} fake-om {})
-           [{:finished_at "2018-04-26T03:14:45.528Z"}
-            {:finished_at "2018-04-26T03:27:54.035Z"}])))
+           [{:finished_at "2018-04-26T03:14:45.528Z"}])))
   (testing "when there are new versions"
     (is (= (check/check {} fake-om {:version {:finished_at "2018-04-26T03:14:45.528Z"}})
            [{:finished_at "2018-04-26T03:14:45.528Z"}
