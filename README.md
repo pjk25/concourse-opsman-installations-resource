@@ -25,9 +25,9 @@ time.
 
 Fetch the installation metadata for an installation
 
-params:
-  fetch_logs: true|false
-  include_history: true|false
+- params:
+  - fetch_logs: true|**false**
+  - include_history: true|**false**
 
 ### out
 
