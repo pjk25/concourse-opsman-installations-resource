@@ -29,4 +29,4 @@
                                            "--path" path)]
       (if (= 0 exit)
         (json/read-str out :key-fn keyword)
-        (throw (Exception. err))))))
+        (throw (ex-info err {:path path}))))))
