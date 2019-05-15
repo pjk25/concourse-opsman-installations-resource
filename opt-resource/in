@@ -2,4 +2,4 @@
 
 set -e
 
-concourse-opsman-installations-resource in "$@"
+concourse-opsman-installations-resource --debug in "$@"

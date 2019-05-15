@@ -35,7 +35,7 @@
           installation (first (filter #(same-installation? version %) installations))]
 
       (if (nil? installation)
-        (throw (Exception. (str "Version " version "not found."))))
+        (throw (ex-info "Version not found" {:version version})))
 
       (if (:include_history params)
         (write-as-json cli-options installations "installations.json"))

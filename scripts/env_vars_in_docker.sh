@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+ORIGINAL_DIR="$(pwd)"
+
 cd "$(dirname "$0")/.."
 
 set -euxo pipefail
@@ -18,4 +20,4 @@ jq -n "{
     \"params\": {
         \"fetch_logs\": true
     }
-}" | docker run -i concourse-opsman-installations-resource /opt/resource/in .
+}" | docker run -i -v "${ORIGINAL_DIR}":/in concourse-opsman-installations-resource /opt/resource/in /in
