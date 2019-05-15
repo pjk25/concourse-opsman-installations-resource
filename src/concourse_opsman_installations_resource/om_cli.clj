@@ -28,5 +28,5 @@
                                            "--silent"
                                            "--path" path)]
       (if (= 0 exit)
-        (json/read-str out :key-fn keyword)
+        out
         (throw (ex-info err {:path path}))))))

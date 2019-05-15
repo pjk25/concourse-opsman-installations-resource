@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+ORIGINAL_DIR="$(pwd)"
+
 cd "$(dirname "$0")/.."
 
 set -euxo pipefail
@@ -14,5 +16,9 @@ jq -n "{
     },
     \"version\": {
         \"finished_at\": \"2019-05-09T03:27:24.576Z\"
+    },
+    \"params\": {
+        \"fetch_logs\": true,
+        \"include_history\": true
     }
-}" | ./concourse-opsman-installations-resource check --debug
+}" | ./scripts/run.sh in ${ORIGINAL_DIR}

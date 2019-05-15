@@ -9,7 +9,7 @@
   (reify om-cli/Om
     (curl [this path]
       (condp = path
-        "/api/v0/installations" (json/read-str (slurp "resources/fixtures/installations.json") :key-fn keyword)
+        "/api/v0/installations" (slurp "resources/fixtures/installations.json")
         (throw (Exception. (slurp "resources/fixtures/curl_not_found.html")))))))
 
 (deftest check
@@ -18,6 +18,9 @@
     (is (= (check/check {} fake-om {})
            [{:finished_at "2018-04-26T03:14:45.528Z"}
             {:finished_at "2018-04-26T03:27:54.035Z"}])))
+  (testing "with no current last version in history_hack_mode"
+    (is (= (check/check {} fake-om {:source {:history_hack_mode true}})
+           [{:finished_at "2018-04-26T03:14:45.528Z"}])))
   (testing "when there are new versions"
     (is (= (check/check {} fake-om {:version {:finished_at "2018-04-26T03:14:45.528Z"}})
            [{:finished_at "2018-04-26T03:14:45.528Z"}

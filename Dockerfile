@@ -28,4 +28,4 @@ RUN chmod +x /usr/local/bin/om
 
 ADD opt-resource /opt/resource
 
-CMD ["/concourse-opsman-installations-resource"]
+CMD ["concourse-opsman-installations-resource"]

@@ -21,12 +21,16 @@
     (if (:debug cli-options)
       (binding [*out* *err*]
         (println "Checking for installations since" previous-version)))
-    (->> (om-cli/curl om "/api/v0/installations")
-         (:installations)
-         (map #(select-keys % [:finished_at]))
-         (reverse)
-         (filterv #(or (nil? previous-version)
-                       (is-gte-version? previous-version %))))))
+    (let [versions (->> (om-cli/curl om "/api/v0/installations")
+                        (#(json/read-str % :key-fn keyword))
+                        (:installations)
+                        (map #(select-keys % [:finished_at]))
+                        (reverse))]
+      (if previous-version
+        (filterv #(is-gte-version? previous-version %) versions)
+        (if (get-in payload [:source :history_hack_mode])
+          (take 1 versions)
+          versions)))))
 
 (s/fdef check
         :args (s/cat :cli-options map?

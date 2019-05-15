@@ -5,7 +5,8 @@
             [clojure.data.json :as json]
             [concourse-opsman-installations-resource.om-cli :as om-cli]
             [concourse-opsman-installations-resource.core :as core]
-            [concourse-opsman-installations-resource.check :as check]))
+            [concourse-opsman-installations-resource.check :as check]
+            [concourse-opsman-installations-resource.in :as in]))
 
 (set! *warn-on-reflection* true)
 
@@ -49,9 +50,9 @@
            (#{"check"} (first arguments)))
       {:action check/check :options options}
 
-      (and (= 1 (count arguments))
+      (and (= 2 (count arguments))
            (#{"in"} (first arguments)))
-      {:action core/in :options options}
+      {:action in/in :options (assoc options :destination (last arguments))}
 
       (and (= 1 (count arguments))
            (#{"out"} (first arguments)))
@@ -69,12 +70,11 @@
     (if exit-message
       (exit (if ok? 0 1) exit-message)
       (try
-        (let [{:keys [source] :as payload} (json/read *in* :key-fn keyword)
-              result (action options (om-cli/->OmCli (:opsmgr source)) payload)]
-          (json/write result *out*)
+        (let [payload (json/read *in* :key-fn keyword)
+              om (om-cli/->OmCli (get-in payload [:source :opsmgr]))]
+          (json/write (action options om payload) *out*)
           (flush)
           (shutdown-agents))
         (catch Exception e
           (if (:debug options) (.printStackTrace e))
           (exit 1 (str "\nERROR: " e)))))))
-

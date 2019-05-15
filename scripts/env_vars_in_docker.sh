@@ -14,5 +14,8 @@ jq -n "{
     },
     \"version\": {
         \"finished_at\": \"2019-05-09T03:27:24.576Z\"
+    },
+    \"params\": {
+        \"fetch_logs\": true
     }
-}" | docker run -i concourse-opsman-installations-resource /opt/resource/check
+}" | docker run -i concourse-opsman-installations-resource /opt/resource/in .
