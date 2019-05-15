@@ -1,9 +1,12 @@
-FROM clojure:tools-deps
+FROM oracle/graalvm-ce:19.0.0 AS BASE
 
-WORKDIR /concourse-opsman-installations-resource
+RUN gu install native-image
 
-RUN curl -L https://github.com/pivotal-cf/om/releases/download/1.0.0/om-linux -o /usr/local/bin/om
-RUN chmod +x /usr/local/bin/om
+RUN curl -O https://download.clojure.org/install/linux-install-1.10.0.442.sh
+RUN chmod +x linux-install-1.10.0.442.sh
+RUN ./linux-install-1.10.0.442.sh
+
+RUN curl -LO https://github.com/pivotal-cf/om/releases/download/1.0.0/om-linux
 
 ADD scripts scripts
 ADD src src
@@ -12,9 +15,17 @@ ADD test test
 ADD deps.edn .
 
 RUN ./scripts/test.sh
+RUN ./scripts/compile.sh
 
-RUN rm -dR resources test scripts
+FROM alpine
+
+RUN apk add --update ca-certificates
+
+COPY --from=BASE /om-linux /usr/local/bin/om
+COPY --from=BASE /concourse-opsman-installations-resource /usr/local/bin
+
+RUN chmod +x /usr/local/bin/om
 
 ADD opt-resource /opt/resource
 
-CMD ["clojure", "-m", "concourse-opsman-installations-resource.cli"]
+CMD ["concourse-opsman-installations-resource"]

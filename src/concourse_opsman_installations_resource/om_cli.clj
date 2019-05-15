@@ -29,4 +29,4 @@
                                            "--path" path)]
       (if (= 0 exit)
         out
-        (throw (Exception. err))))))
+        (throw (ex-info err {:path path}))))))

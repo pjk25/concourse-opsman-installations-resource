@@ -2,5 +2,4 @@
 
 set -e
 
-cd /concourse-opsman-installations-resource
-clojure -m concourse-opsman-installations-resource.cli check --debug "$@"
+concourse-opsman-installations-resource --debug check "$@"
