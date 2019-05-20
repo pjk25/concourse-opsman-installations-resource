@@ -30,8 +30,8 @@
       (binding [*out* *err*]
         (println "Retrieving version" version)))
     (let [installations (->> (om-cli/curl om "/api/v0/installations")
-                            (#(json/read-str % :key-fn keyword))
-                            (:installations))
+                             (#(json/read-str % :key-fn keyword))
+                             (:installations))
           installation (first (filter #(same-installation? version %) installations))]
 
       (if (nil? installation)
@@ -41,7 +41,7 @@
         (write-as-json cli-options installations "installations.json"))
 
       (write-as-json cli-options installation "installation.json")
-      
+
       (if (:fetch_logs params)
         (let [installation_logs (om-cli/curl om (format "/api/v0/installations/%d/logs" (:id installation)))
               logs-file (io/file (:destination cli-options) "installation_logs.json")]

@@ -23,8 +23,8 @@
     (let [temp-dir (Files/createTempDirectory "concourse-opsman-installations-resource-" (into-array FileAttribute []))
           destination (.toString temp-dir)]
       (is (= (in/in {:destination destination} fake-om {:version {:finished_at "2018-04-26T03:14:45.528Z"}})
-           {:version {:finished_at "2018-04-26T03:14:45.528Z"}
-            :metadata [{:name "status" :value "succeeded"}]}))
+             {:version {:finished_at "2018-04-26T03:14:45.528Z"}
+              :metadata [{:name "status" :value "succeeded"}]}))
       (is (= (:id (json/read-str (slurp (io/file destination "installation.json")) :key-fn keyword))
              1))
       (is (not (.exists (io/file destination "installation_logs.json"))))))
@@ -39,8 +39,8 @@
           destination (.toString temp-dir)]
       (is (= (in/in {:destination destination} fake-om {:version {:finished_at "2018-04-26T03:14:45.528Z"}
                                                         :params {:fetch_logs true}})
-           {:version {:finished_at "2018-04-26T03:14:45.528Z"}
-            :metadata [{:name "status" :value "succeeded"}]}))
+             {:version {:finished_at "2018-04-26T03:14:45.528Z"}
+              :metadata [{:name "status" :value "succeeded"}]}))
       (is (= (:id (json/read-str (slurp (io/file destination "installation.json")) :key-fn keyword))
              1))
       (is (json/read-str (slurp (io/file destination "installation_logs.json")))))))
